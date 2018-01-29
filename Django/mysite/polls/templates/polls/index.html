@@ -9,6 +9,9 @@
 <!--</body>-->
 <!--</html>-->
 
+<!--加载静态文件-->
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 
 {% if latest_question_list %}
     <ul>
