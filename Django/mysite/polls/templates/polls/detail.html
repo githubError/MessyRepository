@@ -13,6 +13,7 @@
 <h1> {{ question.question_text }} </h1>
 
 
+<script type="text/javascript" src="http://ip.chinaz.com/getip.aspx"></script>
 {% if error_message %} <p> <strong>  {{ error_message }}  </strong>  </p> {% endif %}
 
 <form action="{% url 'polls:vote' question.id %}" method="post">

@@ -1,0 +1,19 @@
+
+
+.backgroundview {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: gainsboro;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+
+.backgroundcontentview {
+            width: 70%;
+            border: 1px;
+            margin: auto;
+            background-color: white;
+        }
+
