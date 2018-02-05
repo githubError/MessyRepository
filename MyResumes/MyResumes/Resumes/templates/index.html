@@ -1,43 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ userinfo.name }}的个人简历{% endblock %}
+
+{% block css %}
+    {% load staticfiles %}
+    <link  rel="stylesheet"  href="{% static 'css/index.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <h6>&ensp;</h6>
+    <h1>{{ user.name }}</h1>
+    <h3>生日：{{ user.get_birthday }}</h3>
 
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-
-    {% load static %}
-
-    <link  type="text/css" rel="stylesheet"  href="{% static 'Resumes/index.css' %}" />
-
-</head>
-
-<body>
-
-    <div class="backgroundview">
-
-        <div class="backgroundcontentview">
-            <h1>{{ userinfo.name }}</h1>
-            <h1>iOS开发工程师</h1>
+{% endblock %}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-    </div>
-</body>
-</html>
-
-
+{% block js %}
+{% endblock %}
 

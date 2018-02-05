@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+    {{ title }}
+        {% endblock %}
+    </title>
+
+    {% load staticfiles %}
+
+    <link  rel="stylesheet"  href="{% static 'css/base.css' %}" />
+    <link rel="shortcut icon" href="{% static 'images/header.png' %}">
+
+    {% block css %}
+    {% endblock %}
+
+</head>
+<body>
+
+<div class="backgroundview">
+
+        <div class="backgroundcontentwapperview">
+            <div class="backgroundcontentview">
+
+            {% block content %}
+            {% endblock %}
+
+            </div>
+        </div>
+
+</div>
+
+{% block js %}
+{% endblock %}
+
+</body>
+</html>

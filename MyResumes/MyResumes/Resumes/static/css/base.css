@@ -1,5 +1,3 @@
-
-
 .backgroundview {
             width: 100%;
             height: 100%;
@@ -10,10 +8,19 @@
 }
 
 
+.backgroundcontentwapperview{
+    width: 80%;
+    border: 1px;
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+}
+
+
 .backgroundcontentview {
-            width: 70%;
-            border: 1px;
-            margin: auto;
-            background-color: yellow;
+    width: 95%;
+    border: 1px;
+    margin: auto;
+    background-color: bisque;
 }
 

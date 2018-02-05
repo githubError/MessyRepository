@@ -2,7 +2,7 @@
 
 from django.db import models
 from django.utils import timezone
-import datetime
+import datetime, time
 
 
 # 基本信息
@@ -24,6 +24,11 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_birthday(self):
+        brithday = str('%s' % self.birthday)
+        brithday = brithday.replace('-','.')
+        return brithday
 
 
 
