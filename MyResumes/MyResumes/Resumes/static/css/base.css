@@ -33,14 +33,15 @@ body {
 }
 
 .url {
-    color: cornflowerblue;
+    color: black;
     text-decoration: none;
 }
 
 hr{
     height: 1px;
     border: none;
-    border-top: 1px dashed #0066CC;
+    border-top: 1px dashed #909090;
+    margin-bottom: 20px;
 }
 
 
