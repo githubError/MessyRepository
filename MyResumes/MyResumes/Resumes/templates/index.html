@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ userinfo.name }}的个人简历{% endblock %}
+{% block title %}{{ user.name }}的个人简历{% endblock %}
 
 {% block css %}
     {% load staticfiles %}
@@ -8,14 +8,66 @@
 {% endblock %}
 
 {% block content %}
-    <h6>&ensp;</h6>
+    <br>
     <h1>{{ user.name }}</h1>
-    <h3>生日：{{ user.get_birthday }}</h3>
+    <h2>iOS开发工程师</h2>
+    <div>
+    <hr/>
+    <ul>
+        <li class="info_li">
+            联系电话：{{ user.telephone }}
+        </li>
+        <li class="info_li">
+            电子邮箱：<a href="#" class="url" onclick="eamilDidClick()" id="info_email">{{ user.email }}</a>
+        </li>
+        <li class="info_li">
+            个人博客：<a href="{{ user.blog }}" class="url" target="_blank">{{ user.blog }}</a>
+        </li>
+        <li class="info_li">
+             GitHub  ：<a href="{{ user.github }}" class="url" target="_blank">{{ user.github }}</a>
+        </li>
+    </ul>
+    <br>
+    </div>
 
+    <div>
+    <h2>专业技能</h2>
+    <hr/>
+    <ul>
+        {% for skill in skills %}
+            <li class="info_li">{{ skill.content }}</li>
+        {% endfor %}
+    </ul>
+    <br>
+    </div>
+
+
+    <div>
+    <h2>工作经历</h2>
+    <hr/>
+    {% for record_dict in record_list %}
+        <span><h4>{{ record_dict.record.company }}</h4> {{ record_dict.record.get_start_time }} - {{ record_dict.record.get_end_time }} </span>
+
+        <br>
+        <br>
+        <span>{{ record_dict.record.summary }} </span>
+
+        {% for function in record_dict.function %}
+            <h5>{{ function.content }}</h5>
+
+        {% endfor %}
+    {% endfor %}
+    </div>
 
 {% endblock %}
 
 
 {% block js %}
+    <script>
+    function eamilDidClick() {
+        alert('电子邮件已复制');
+    }
+    </script>
+    
 {% endblock %}
 
