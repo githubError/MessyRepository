@@ -44,20 +44,42 @@
 
     <div>
     <h2>工作经历</h2>
-    <hr/>
+    <hr style="margin-bottom: 20px"/>
     {% for record_dict in record_list %}
-        <span><h4>{{ record_dict.record.company }}</h4> {{ record_dict.record.get_start_time }} - {{ record_dict.record.get_end_time }} </span>
-
-        <br>
-        <br>
-        <span>{{ record_dict.record.summary }} </span>
-
+        <span style="font-weight: bold; font-size: 15px; margin-top: 30px">{{ record_dict.record.company }} </span> &ensp; <span style="font-size: 10px; font-weight: normal">{{ record_dict.record.get_start_time }} - {{ record_dict.record.get_end_time }}</span>
+        <p class="company_summary"><span>{{ record_dict.record.summary }} </span></p>
+        <ul>
         {% for function in record_dict.function %}
-            <h5>{{ function.content }}</h5>
-
+            <li class="info_li">{{ function.content }}</li>
         {% endfor %}
+        </ul>
+    {% endfor %}
+    <br>
+    </div>
+
+
+    <div>
+    <h2>教育经历</h2>
+    <hr style="margin-bottom: 20px"/>
+    {% for education in education_list %}
+        <div class="flex_box">
+            <div class="flex_item", style="order: 0; font-size: 15px"><span>{{ education.get_start_time }} - {{ education.get_end_time }}</span></div>
+            <div class="flex_item", style="order: 1"><a href="{{ education.school_url }}" target="_blank" style="color: black; text-decoration: none "><span>{{ education.school }}</span></a></div>
+            <div class="flex_item", style="order: 2"><span>{{ education.major }}</span></div>
+            <div class="flex_item", style="order: 3"><span>{{ education.edu_grade }}</span></div>
+        </div>
     {% endfor %}
     </div>
+
+
+    <div>
+    <h2>自我介绍</h2>
+    <hr style="margin-bottom: 20px"/>
+    <span>{{ user.introduce }}</span>
+    <br>
+    </div>
+
+    <div style="margin-bottom: 50px"><h1>&ensp;</h1></div>
 
 {% endblock %}
 

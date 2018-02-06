@@ -43,3 +43,24 @@ hr{
     border-top: 1px dashed #0066CC;
 }
 
+
+.company_summary{
+    font-size: 15px;
+    font-weight: normal;
+    text-indent: 15px;
+}
+
+
+.flex_box{
+    padding:10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: space-between;
+}
+
+.flex_item{
+    width: 150px;
+    margin-bottom: 10px;
+}

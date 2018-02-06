@@ -12,6 +12,7 @@ class BaseModel(models.Model):
             return '至今'
         formatStr = str('%s' % date)
         formatStr = formatStr.replace('-', '.')
+        formatStr = formatStr[:formatStr.__len__() - 3]
         return formatStr
 
     class Meta:
@@ -107,6 +108,13 @@ class Education(BaseModel):
 
     start_time = models.DateField('开始时间')
     end_time = models.DateField('结束时间', blank=True)
+
+
+    def get_start_time(self):
+        return self.get_formater_date(self.start_time)
+
+    def get_end_time(self):
+        return self.get_formater_date(self.end_time)
 
     def __str__(self):
         return self.school
