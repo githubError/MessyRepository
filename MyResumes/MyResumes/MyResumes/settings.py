@@ -25,7 +25,7 @@ SECRET_KEY = 'lqpjra6xa@pm96&$y1xri(uau#vk2&)7b1hi6$k&v=zvne*o)%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'NAME' : 'myresumes',
         'USER' : 'root',
         'PASSWORD' : 'root',
-        'HOST' : 'localhost',
+        'HOST' : '140.143.249.103',
         'PORT' : '5432',
     }
 }
