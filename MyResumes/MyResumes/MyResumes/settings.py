@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'MyResumes.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'MyResumes',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME' : 'myresumes',
         'USER' : 'root',
         'PASSWORD' : 'root',
         'HOST' : 'localhost',
-        'PORT' : '3306',
+        'PORT' : '5432',
     }
 }
 
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
