@@ -8,9 +8,9 @@ import datetime, time
 class BaseModel(models.Model):
 
     def get_formater_date(self, date):
-        if date == '0000-00-00':
-            return '至今'
         formatStr = str('%s' % date)
+        if formatStr == '1970-01-01':
+            return '至今'
         formatStr = formatStr.replace('-', '.')
         formatStr = formatStr[:formatStr.__len__() - 3]
         return formatStr
