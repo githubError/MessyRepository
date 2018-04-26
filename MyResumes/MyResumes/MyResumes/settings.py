@@ -118,7 +118,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 # email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.163.com'
 
