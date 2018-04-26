@@ -118,6 +118,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+# email
+
+EMAIL_HOST = 'smtp.163.com'
+
+EMAIL_PORT = 25
+
+EMAIL_HOST_USER = 'githuberror@163.com'
+
+EMAIL_HOST_PASSWORD = 'cpf9401'
+
+DEFAULT_CHARSET = 'utf-8'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
