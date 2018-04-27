@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.views import generic
-from django.core.mail import send_mail
-import datetime
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import threading
+from Resumes.utils import post_resumes_notify_email, post_articel_notify_email
 
-from MyResumes import settings
+
 from .models import UserInfo, Skill, Record, Function, Education
 
 
@@ -13,30 +15,11 @@ class IndexView(generic.ListView):
 
     model = UserInfo
 
-    # def get_queryset(self):
-    #     return UserInfo.objects.all()[0]
 
     def get_context_data(self, *, object_list=None, **kwargs):
 
-        # print(self.request.META)
-
-#         ip = self.request.META['REMOTE_ADDR']
-#         if 'HTTP_X_FORWARDED_FOR' in self.request.META.keys():
-#             ip =  self.request.META['HTTP_X_FORWARDED_FOR']  
-#         else:  
-#             ip = self.request.META['REMOTE_ADDR']
-
-#         emial_content = ''' 
-# 你有一条新访问!  
-#     时间：%s\n
-
-# 来源信息：\n
-#     IP地址：%s\n
-#     浏览器类型：%s\n
-
-#         ''' % (datetime.datetime.now(), ip, self.request.META['HTTP_USER_AGENT'])
-
-#        send_mail('简历有一条新访问', '内容', settings.EMAIL_HOST_USER, [settings.EMAIL_HOST_USER])
+        t = threading.Thread(target=post_resumes_notify_email, name='post_resumes_notify_email', args=(self.request,))
+        t.start()
 
         kwargs = super(IndexView,self).get_context_data(**kwargs)
         user = UserInfo.objects.all()[0]
@@ -61,3 +44,23 @@ class IndexView(generic.ListView):
         kwargs['education_list'] = education_list
 
         return kwargs
+
+
+
+class APIView(generic.ListView):
+    http_method_names = ['post']
+
+    @csrf_exempt    # 防止POST请求403错误
+    def post(self, request, *args, **kwargs):
+        urlpath = request.POST['urlpath']
+        title = request.POST['title']
+        t = threading.Thread(target=post_articel_notify_email, name='post_resumes_notify_email', args=(urlpath, title))
+        t.start()
+
+        response = HttpResponse(b'{"code":"1000", "msg":"success", "body":{}}',content_type='application/json')
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+        response["Access-Control-Max-Age"] = "1000"
+        response["Access-Control-Allow-Headers"] = "*"
+
+        return response

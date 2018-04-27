@@ -11,3 +11,6 @@ MyResumes/MyResumes/.idea
 
 */.DS_Store
 
+*/migrations
+
+*/__pycache__
