@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import UserInfo, Skill, Education, Record, Function
+from .models import UserInfo, Skill, Education, Record, Function, Project
 
 class SkillInline(admin.TabularInline):
     model = Skill
@@ -41,3 +41,4 @@ admin.site.register(Skill)
 admin.site.register(Education)
 admin.site.register(Record, RecordAdmin)
 admin.site.register(Function)
+admin.site.register(Project)

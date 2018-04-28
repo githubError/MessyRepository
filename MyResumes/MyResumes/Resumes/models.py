@@ -93,6 +93,19 @@ class Function(BaseModel):
 
 
 
+# 个人项目
+class Project(BaseModel):
+    
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    name = models.CharField('项目名称', max_length=50, blank=False)
+    url = models.URLField('项目链接', default='https://github.com/githubError/')
+    content = models.TextField('描述', default='')
+
+    def __str__(self):
+        return self.name
+
+
+
 # 教育经历
 class Education(BaseModel):
 
