@@ -30,7 +30,13 @@
 
 .url {
     color: black;
+    text-decoration: underline;
+}
+
+.url_title {
+    color: black;
     text-decoration: none;
+    font-weight: bold;
 }
 
 hr{

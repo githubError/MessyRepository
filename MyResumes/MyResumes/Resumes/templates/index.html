@@ -46,15 +46,28 @@
     <h2>工作经历</h2>
     <hr/>
     {% for record_dict in record_list %}
-        <span style="font-weight: bold; font-size: 15px; margin-top: 30px">{{ record_dict.record.company }} </span> &ensp; <span style="font-size: 10px; font-weight: normal">{{ record_dict.record.get_start_time }} - {{ record_dict.record.get_end_time }}</span>
+        <span style="font-weight: bold; font-size: 16px; margin-top: 30px">{{ record_dict.record.company }} </span> &ensp; <span style="font-size: 12px; font-weight: normal">{{ record_dict.record.get_start_time }} - {{ record_dict.record.get_end_time }}</span>
         <p class="company_summary"><span>{{ record_dict.record.summary }} </span></p>
         <ul>
         {% for function in record_dict.function %}
             <li class="info_li">{{ function.content }}</li>
         {% endfor %}
         </ul>
+        <br/>
     {% endfor %}
-    <br>
+    </div>
+
+
+    <div>
+    <h2>个人项目</h2>
+    <hr/>
+    {% for project in project_list%}
+        <a href="{{ project.url }}" class ="url_title">{{ project.name }}</a>
+        <p class="company_summary"><span> &ensp; {{ project.content }} </span></p>
+        <span style="font-size:14px;">&ensp;&ensp;&ensp;&ensp;项目地址：<a href="{{ project.url }}" class="url">{{ project.url }}</a></span>
+        <br/><br/>
+
+    {% endfor %}    
     </div>
 
 

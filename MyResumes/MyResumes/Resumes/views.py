@@ -6,7 +6,7 @@ import threading
 from Resumes.utils import post_resumes_notify_email, post_articel_notify_email
 
 
-from .models import UserInfo, Skill, Record, Function, Education
+from .models import UserInfo, Skill, Record, Function, Education, Project
 
 
 class IndexView(generic.ListView):
@@ -24,7 +24,7 @@ class IndexView(generic.ListView):
         kwargs = super(IndexView,self).get_context_data(**kwargs)
         user = UserInfo.objects.all()[0]
 
-        skills = Skill.objects.filter(user_id=user.id)
+        skills = Skill.objects.filter(user_id=user.id).order_by('id')
 
         record_list = list()
 
@@ -38,10 +38,13 @@ class IndexView(generic.ListView):
 
         education_list = Education.objects.filter(user_id=user.id)
 
+        project_list = Project.objects.filter(user_id=user.id).order_by('id')
+
         kwargs['user'] = user
         kwargs['skills'] = skills
         kwargs['record_list'] = record_list
         kwargs['education_list'] = education_list
+        kwargs['project_list'] = project_list
 
         return kwargs
 
