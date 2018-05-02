@@ -62,7 +62,7 @@
     <h2>个人项目</h2>
     <hr/>
     {% for project in project_list%}
-        <a href="{{ project.url }}" class ="url_title">{{ project.name }}</a>
+        <p href="{{ project.url }}" style="font-weight:bold;">{{ project.name }}</p>
         <p class="company_summary"><span> &ensp; {{ project.content }} </span></p>
         <span style="font-size:14px;">&ensp;&ensp;&ensp;&ensp;项目地址：<a href="{{ project.url }}" class="url">{{ project.url }}</a></span>
         <br/><br/>
@@ -100,7 +100,19 @@
 {% block js %}
     <script>
     function eamilDidClick() {
-        alert('电子邮件已复制');
+        const input = document.createElement('input');
+        input.setAttribute('readonly', 'readonly');
+        input.setAttribute('value', document.getElementById('info_email').innerHTML);
+        document.body.appendChild(input);
+        input.setSelectionRange(0, 9999);
+        input.select();
+        if (document.execCommand('copy', false, null)) {
+            document.execCommand('copy');
+            alert('已复制到剪贴板！');
+        } else {
+            alert('不兼容此浏览器类型，请手动复制');
+        }
+        document.body.removeChild(input);
     }
     </script>
     
