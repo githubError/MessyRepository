@@ -15,7 +15,6 @@ class IndexView(generic.ListView):
 
     model = UserInfo
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
 
         t = threading.Thread(target=post_resumes_notify_email, name='post_resumes_notify_email', args=(self.request,))
