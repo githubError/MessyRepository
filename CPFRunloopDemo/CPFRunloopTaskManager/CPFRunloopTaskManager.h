@@ -22,8 +22,6 @@ typedef BOOL(^CPFRunloopTask)(void);
 
 @property (nonatomic, assign) NSUInteger maximumTaskCount;
 
-@property (nonatomic, copy) void(^portMessageCallBack)(NSData *data);
-
 + (instancetype)defaultManager;
 
 - (void)addTaskUnit:(CPFRunloopTaskUnit *)taskUnit;
@@ -37,6 +35,6 @@ typedef BOOL(^CPFRunloopTask)(void);
 - (void)suspend;
 - (void)resume;
 
-- (void)postRunloopPortMassgae:(NSData *)messageData;
+- (void)executeTask:(CPFRunloopTask)task;
 
 @end

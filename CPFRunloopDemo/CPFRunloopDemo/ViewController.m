@@ -13,12 +13,16 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, strong) NSMutableArray *dataSource;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.dataSource = @[@"1",@"2",@"3",@"4"].mutableCopy;
     
     [self simulateTask];
     
@@ -47,9 +51,6 @@
     
     CPFRunloopTaskUnit *taskUnit_3 = [[CPFRunloopTaskUnit alloc] initTaskUnit:^BOOL{
         
-        // 发送端口通知
-        [self postMessage];
-        
         NSLog(@"正在执行 taskUnit_3");
         return YES;
     } forIdentifier:@"taskUnit_3"];
@@ -57,6 +58,8 @@
     
     CPFRunloopTaskUnit *taskUnit_4 = [[CPFRunloopTaskUnit alloc] initTaskUnit:^BOOL{
         NSLog(@"正在执行 taskUnit_4");
+        [self.dataSource addObject:@"5"];
+        [self.tableView reloadData];
         return YES;
     } forIdentifier:@"taskUnit_4"];
     [[CPFRunloopTaskManager defaultManager] addTaskUnit:taskUnit_4];
@@ -70,22 +73,17 @@
     
     // 移除未执行的任务
     // [[CPFRunloopTaskManager defaultManager] removeTaskForIdentifier:@"taskUnit_4"];
-    
-    [[CPFRunloopTaskManager defaultManager] setPortMessageCallBack:^(NSData *data) {
-        NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"-----> %@",message);
-    }];
 }
 
 - (void)resume {
     [[CPFRunloopTaskManager defaultManager] resume];
 }
 
-- (void)postMessage {
-    // 创建消息体
-    NSString *message = @"this is a message";
-    NSData *messageData = [message dataUsingEncoding:NSUTF8StringEncoding];
-    [[CPFRunloopTaskManager defaultManager] postRunloopPortMassgae:messageData];
+- (void)executeTask {
+    [[CPFRunloopTaskManager defaultManager] executeTask:^BOOL{
+        NSLog(@"立即执行");
+        return YES;
+    }];
 }
 
 - (void)setupTableView {
@@ -99,7 +97,7 @@
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftBtn setTitle:@"发送通知" forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [leftBtn addTarget:self action:@selector(postMessage) forControlEvents:UIControlEventTouchUpInside];
+    [leftBtn addTarget:self action:@selector(executeTask) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
     
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -110,7 +108,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 30;
+    return self.dataSource.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -119,12 +117,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"test"];
-    cell.textLabel.text = [NSString stringWithFormat:@"%zd",indexPath.row];
+    cell.textLabel.text = self.dataSource[indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self postMessage];
+    [self.dataSource removeObjectAtIndex:indexPath.row];
+    [self.tableView reloadData];
 }
 
 @end

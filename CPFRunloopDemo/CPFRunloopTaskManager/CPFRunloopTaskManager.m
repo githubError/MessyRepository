@@ -8,7 +8,7 @@
 
 #import "CPFRunloopTaskManager.h"
 
-#define kRunloopPortSourceNotificationName CFSTR("kRunloopPortSourceNotificationName")
+#define kRunloopPortSourceNotificationName CFSTR("com.cuipengfei.CPFRunloopDemo.group.port")
 
 @implementation CPFRunloopTaskUnit
 
@@ -38,12 +38,30 @@
     return [_identifier copy];
 }
 
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+    if (![self isKindOfClass:[object class]]) {
+        return NO;
+    }
+    if ([_identifier isEqualToString:[(CPFRunloopTaskUnit *)object identifier]]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (NSUInteger)hash {
+    return [_identifier hash];
+}
+
 @end
 
 @interface CPFRunloopTaskManager ()
 {
     @public
     CFRunLoopRef _runloop;
+    CFRunLoopSourceRef _source0;
 }
 
 @property (nonatomic, strong) NSMutableArray <CPFRunloopTaskUnit *> *taskUnits;
@@ -51,6 +69,8 @@
 @property (nonatomic, strong) CPFRunloopTaskUnit *currentExecuteTaskUnit;
 
 @property (nonatomic, assign, getter=isSuspend) BOOL suspend;
+
+@property (nonatomic, strong) CPFRunloopTaskUnit *executetTaskUnit;
 
 @end
 
@@ -113,11 +133,12 @@
     CFRunLoopObserverRef observer = CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, YES, 0, runLoopOberverCallback, &context);
     CFRunLoopAddObserver(instance->_runloop, observer, kCFRunLoopDefaultMode);
     
-    // 添加Source1，用于监听端口通知
-    CFMessagePortContext portContext = {.version = 0, .info = (__bridge void *)instance, &CFRetain, &CFRelease, NULL};
-    CFMessagePortRef localPort = CFMessagePortCreateLocal(kCFAllocatorDefault, kRunloopPortSourceNotificationName, callBack, &portContext, NULL);
-    CFRunLoopSourceRef source = CFMessagePortCreateRunLoopSource(kCFAllocatorDefault, localPort, 0);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+    
+    CFRunLoopSourceContext source0Context = {.version = 0, .info = (__bridge void *)instance, .cancel = NULL, .perform = source0Perform};
+    CFRunLoopSourceRef source0 = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &source0Context);
+    instance->_source0 = source0;
+    CFRunLoopSourceSignal(source0);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), source0, kCFRunLoopDefaultMode);
     
     CFRelease(observer);
 }
@@ -139,13 +160,19 @@ static inline void runLoopOberverCallback(CFRunLoopObserverRef observer, CFRunLo
     CFRunLoopWakeUp(instance->_runloop);
 }
 
-static inline CFDataRef callBack (CFMessagePortRef local, SInt32 msgid, CFDataRef data, void *info) {
+- (void)executeTask:(CPFRunloopTask)task {
+    self.executetTaskUnit = [[CPFRunloopTaskUnit alloc] initTaskUnit:task forIdentifier:@"false"];
+    CFRunLoopSourceSignal(_source0);
+    CFRunLoopWakeUp(_runloop);
+}
+
+static inline void source0Perform (void *info) {
     CPFRunloopTaskManager *Self = (__bridge CPFRunloopTaskManager *)info;
-    NSData *messageData = (__bridge NSData *)data;
-    if (Self.portMessageCallBack) {
-        Self.portMessageCallBack(messageData);
+    while (Self.executetTaskUnit && [Self.executetTaskUnit.identifier isEqualToString:@"false"]) {
+        Self.executetTaskUnit.task();
+        Self.executetTaskUnit.identifier = @"true";
+        Self.executetTaskUnit = nil;
     }
-    return NULL;
 }
 
 + (instancetype)defaultManager {
