@@ -42,7 +42,10 @@
         
         // 暂停执行任务5秒
         [[CPFRunloopTaskManager defaultManager] suspend];
-        [self performSelector:@selector(resume) withObject:nil afterDelay:5];
+        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+//            [self resume];
+//        });
         
         NSLog(@"正在执行 taskUnit_2");
         return YES;
@@ -104,7 +107,14 @@
     [rightBtn setTitle:@"载入任务" forState:UIControlStateNormal];
     [rightBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(simulateTask) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    UIBarButtonItem *right1 = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    
+    UIButton *rightBtn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rightBtn2 setTitle:@"继续任务" forState:UIControlStateNormal];
+    [rightBtn2 setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [rightBtn2 addTarget:self action:@selector(resume) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *right2 = [[UIBarButtonItem alloc] initWithCustomView:rightBtn2];
+    self.navigationItem.rightBarButtonItems = @[right1, right2];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -122,8 +132,14 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.dataSource removeObjectAtIndex:indexPath.row];
-    [self.tableView reloadData];
+    
+    [[CPFRunloopTaskManager defaultManager] addTask:^BOOL{
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.textLabel.text = @"文字已修改";
+        return YES;
+    } forIdentifier:[NSString stringWithFormat:@"%zd",indexPath.row]];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

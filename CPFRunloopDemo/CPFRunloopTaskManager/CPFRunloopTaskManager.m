@@ -144,10 +144,11 @@
 }
 
 static inline void runLoopOberverCallback(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
+    if (activity != kCFRunLoopBeforeWaiting) { return; }
     CPFRunloopTaskManager *instance = (__bridge CPFRunloopTaskManager *)info;
-    if (instance.taskUnits.count == 0) {
-        return;
-    }
+    if (instance.isSuspend) { return; }
+    if (instance.taskUnits.count == 0) { return; }
+    
     BOOL result = NO;
     while (result == NO && instance.taskUnits.count && !instance.isSuspend) {
         CPFRunloopTaskUnit *taskUnit = instance.taskUnits.firstObject;

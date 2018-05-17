@@ -1,0 +1,2 @@
+### RunloopTaskManager
+> 支持创建task任务，已添加的task将会在主线程Runloop进入休眠之前被执行，并且每次Runloop只执行一个task，从而达到将必须在主线程执行的任务延后执行的目的，对防止屏幕卡顿掉帧有良好的效果。
