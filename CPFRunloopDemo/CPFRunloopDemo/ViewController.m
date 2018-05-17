@@ -22,9 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.dataSource = @[@"1",@"2",@"3",@"4"].mutableCopy;
-    
-    [self simulateTask];
+    for (int i = 0; i < 200; i++) {
+        [self.dataSource addObject:[NSString stringWithFormat:@"%d",i]];
+    }
     
     [self setupTableView];
 }
@@ -43,11 +43,8 @@
         // 暂停执行任务5秒
         [[CPFRunloopTaskManager defaultManager] suspend];
         
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-//            [self resume];
-//        });
-        
         NSLog(@"正在执行 taskUnit_2");
+        
         return YES;
     } forIdentifier:@"taskUnit_2"];
     [[CPFRunloopTaskManager defaultManager] addTaskUnit:taskUnit_2];
@@ -122,24 +119,55 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 44;
+    return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"test"];
+    UIImageView *imageView = [cell.contentView viewWithTag:10];
+    [imageView removeFromSuperview];
     cell.textLabel.text = self.dataSource[indexPath.row];
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [[CPFRunloopTaskManager defaultManager] addTask:^BOOL{
+        [UIView transitionWithView:cell.contentView duration:0.35 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(cell.frame.size.width - 100, 0, 100, cell.frame.size.height)];
+            imageView.tag = 10;
+            [cell.contentView addSubview:imageView];
+            
+            imageView.image = [UIImage imageNamed:@"image"];
+            cell.textLabel.text = [NSString stringWithFormat:@"---%zd",indexPath.row];
+        } completion:^(BOOL finished) {
+            
+        }];
+        return YES;
+    } forIdentifier:[NSString stringWithFormat:@"%---zd",indexPath.row]];
+}
+
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    UIImageView *imageView = [cell.contentView viewWithTag:10];
+    [imageView removeFromSuperview];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [[CPFRunloopTaskManager defaultManager] addTask:^BOOL{
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        UIImageView *imageView = [cell.contentView viewWithTag:10];
+        [imageView removeFromSuperview];
         cell.textLabel.text = @"文字已修改";
         return YES;
     } forIdentifier:[NSString stringWithFormat:@"%zd",indexPath.row]];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSMutableArray *)dataSource {
+    if (!_dataSource) {
+        _dataSource = [NSMutableArray array];
+    }
+    return _dataSource;
 }
 
 @end
