@@ -12,14 +12,14 @@
 - 需要注意的是，移除任务必须明确某个任务对象，或者指定任务的唯一标识 **identifier**，且正在执行的任务无法移除。
 
 ```
-	- (void)addTaskUnit:(CPFRunloopTaskUnit *)taskUnit;
+- (void)addTaskUnit:(CPFRunloopTaskUnit *)taskUnit;
 	
-	- (void)removeTaskUnit:(CPFRunloopTaskUnit *)taskUnit;
+- (void)removeTaskUnit:(CPFRunloopTaskUnit *)taskUnit;
 
-	- (void)addTask:(CPFRunloopTask)task forIdentifier:(NSString *)identifier;
-	- (void)removeTaskForIdentifier:(NSString *)identifier;
+- (void)addTask:(CPFRunloopTask)task forIdentifier:(NSString *)identifier;
+- (void)removeTaskForIdentifier:(NSString *)identifier;
 
-	- (void)removeAllTaskUnit;
+- (void)removeAllTaskUnit;
 
 ```
 - 已添加的任务支持暂停和恢复执行，正在执行的任务无法暂停。
@@ -46,11 +46,11 @@
 - 添加任务
 
 ```
-	CPFRunloopTaskUnit *taskUnit_1 = [[CPFRunloopTaskUnit alloc] initTaskUnit:^BOOL{
+CPFRunloopTaskUnit *taskUnit_1 = [[CPFRunloopTaskUnit alloc] initTaskUnit:^BOOL{
         NSLog(@"正在执行 taskUnit_1");
         return YES;
     } forIdentifier:@"taskUnit_1"];
-    [[CPFRunloopTaskManager defaultManager] addTaskUnit:taskUnit_1];
+[[CPFRunloopTaskManager defaultManager] addTaskUnit:taskUnit_1];
 ```
 
 - 暂停任务
