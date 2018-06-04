@@ -22,7 +22,7 @@ def post_resumes_notify_email(request):
 
 
 
-def post_articel_notify_email(urlpath, title):
+def post_articel_notify_email(request, urlpath, title):
     print('-----> 发送邮件')
 
     userAgent = praser_userAgent(request.META.get('HTTP_USER_AGENT', None))
