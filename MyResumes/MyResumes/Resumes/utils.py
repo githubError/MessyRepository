@@ -25,12 +25,15 @@ def post_resumes_notify_email(request):
 def post_articel_notify_email(urlpath, title):
     print('-----> 发送邮件')
 
+    userAgent = praser_userAgent(request.META.get('HTTP_USER_AGENT', None))
+
     emial_content = ''' 
     你有一条新访问!  
         时间：%s\n
+        userAgent：%s\n
         标题: %s\n
         地址: %s\n
-           ''' % (datetime.datetime.now(), title, urlpath)
+           ''' % (datetime.datetime.now(), userAgent, title, urlpath)
 
     try:
         send_mail('主页有一条新访问', emial_content, 'githuberror@163.com', ['githuberror@163.com'])
