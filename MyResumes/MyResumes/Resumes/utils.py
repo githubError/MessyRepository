@@ -22,10 +22,8 @@ def post_resumes_notify_email(request):
 
 
 
-def post_articel_notify_email(request, urlpath, title):
+def post_articel_notify_email(userAgent, urlpath, title):
     print('-----> 发送邮件')
-
-    userAgent = praser_userAgent(request.META.get('HTTP_USER_AGENT', None))
 
     emial_content = ''' 
     你有一条新访问!  

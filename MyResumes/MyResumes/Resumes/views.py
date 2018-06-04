@@ -56,7 +56,9 @@ class APIView(generic.ListView):
     def post(self, request, *args, **kwargs):
         urlpath = request.POST['urlpath']
         title = request.POST['title']
-        t = threading.Thread(target=post_articel_notify_email, name='post_resumes_notify_email', args=(request, urlpath, title))
+        userAgent = request.META.get('HTTP_USER_AGENT', None)
+        
+        t = threading.Thread(target=post_articel_notify_email, name='post_resumes_notify_email', args=(userAgent, urlpath, title))
         t.start()
 
         response = HttpResponse(b'{"code":"1000", "msg":"success", "body":{}}',content_type='application/json')
